@@ -7,6 +7,8 @@ Questão 2)  Escreva   uma   classe   em   que   cada   objeto   representa   um
 •vagas: retorna o número de cadeiras disponíveis (não ocupadas) no voo.
 •isCheio: retorna verdadeiro se o avião já estiver cheio.
  */
+import 'dart:io';
+
 class Voo {
   int numVoo;
   DateTime dataVoo;
@@ -53,27 +55,61 @@ class Voo {
   }
 }
 
+void menu (Voo vooMenu) {
+  int opcao, cadeira;
+
+  do {
+    print("MENU");
+    print("1 - Proximo livre");
+    print("2 - Verifica cadeira"); 
+    print("3 - Ocupa cadeira");
+    print("4 - Vagas");
+    print("5 - Cheio");
+    print("6 - Sair");
+
+    stdout.write("Escolha uma opção: ");
+    opcao = int.parse(stdin.readLineSync()!);
+
+    switch (opcao) {
+      case 1:
+        print("A próxima cadeira livre é a ${vooMenu.proximoLivre()}\n");
+      case 2:
+        stdout.write("Digite o número da cadeira: ");
+        cadeira = int.parse(stdin.readLineSync()!);
+
+        if (vooMenu.verifica(cadeira)) {
+          print("Cadeira livre.\n");
+        } else {
+          print("Cadeira ocupada.\n");
+        }
+      case 3:
+        stdout.write("Digite o número da cadeira: ");
+        cadeira = int.parse(stdin.readLineSync()!);
+
+        if (vooMenu.ocupa(cadeira)) {
+          print("Cadeira ocupada.\n");
+        } else {
+          print("A cadeira ja estava ocupada.\n");
+        }
+      case 4:
+        print("Vagas: ${vooMenu.vagas()}\n");
+      case 5:
+        if (vooMenu.isCheio()) {
+          print("O voo está cheio.\n");
+        } else {
+          print("O voo não está cheio.\n");
+        }
+      case 6:
+        break;
+      default:
+        print("Opção inválida.\n");
+    }
+  } while (opcao != 6);
+}
+
 void main () {
-  Voo meuVoo = Voo(
-    numVoo: 123,
-    dataVoo: DateTime.now()
-  );
+  Voo meuVoo = Voo(numVoo: 1, dataVoo: DateTime.now());
+  print("Voo criado! Número: ${meuVoo.numVoo}. Data: ${meuVoo.dataVoo}\n");
 
-  print('Voo número: ${meuVoo.numVoo} em ${meuVoo.dataVoo}');
-  print('Vagas iniciais: ${meuVoo.vagas()}'); // Deve exibir 100
-  print('Próxima cadeira livre: ${meuVoo.proximoLivre()}'); // Deve exibir 1
-
-  // Ocupando algumas cadeiras
-  print('\nTentando ocupar a cadeira 5: ${meuVoo.ocupa(5)}'); // true
-  print('Tentando ocupar a cadeira 5 novamente: ${meuVoo.ocupa(5)}'); // false
-  
-  print('\nA cadeira 5 está ocupada? ${meuVoo.verifica(5)}'); // true
-  print('A cadeira 6 está ocupada? ${meuVoo.verifica(6)}'); // false
-
-  print('\nPróxima cadeira livre agora: ${meuVoo.proximoLivre()}'); // Deve exibir 1
-  meuVoo.ocupa(1);
-  print('Próxima cadeira livre após ocupar a 1: ${meuVoo.proximoLivre()}'); // Deve exibir 2
-
-  print('\nTotal de vagas restantes: ${meuVoo.vagas()}'); // Deve exibir 98
-  print('O avião está cheio? ${meuVoo.isCheio()}'); // false
+  menu(meuVoo);
 }
